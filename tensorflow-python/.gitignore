@@ -1,0 +1,7 @@
+.DS_Store
+*.npy
+*.h5
+.ipynb_checkpoints
+/crow/
+/boar/
+/monkey/
