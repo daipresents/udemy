@@ -1,7 +1,12 @@
 .DS_Store
 *.npy
 *.h5
+*.jpg
+*.png
+*.gif
+*.pyc
 .ipynb_checkpoints
 /crow/
 /boar/
 /monkey/
+/uploads/
