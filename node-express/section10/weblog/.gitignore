@@ -3,3 +3,4 @@
 /public/production
 /log/system
 /log/application
+/log/access
