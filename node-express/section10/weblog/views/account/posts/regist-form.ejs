@@ -22,7 +22,7 @@
           var errors = locals.errors || {};
           var original = locals.original || {};
         %>
-        <% if (errors) {%>
+        <% if (locals.errors ) {%>
           <div class="alert alert-danger">
             <% for (var key in errors) {%>
               <div><i class="fa fa-exclamation-circle fa-fw mr-2"></i><%= errors[key] %></div>
