@@ -69,16 +69,22 @@ passport.use("local-strategy",
 initialize = function () {
   return [
     passport.initialize(),
-    passport.session()
+    passport.session(),
+    function (req, res, next) {
+      if (req.user) {
+        res.locals.user = req.user;
+      }
+      next();
+    }
   ];
 };
 
 authenticate = function () {
   return passport.authenticate(
     "local-strategy", {
-      successRedirect: "/account/",
-      failureRedirect: "/account/login"
-    }
+    successRedirect: "/account/",
+    failureRedirect: "/account/login"
+  }
   );
 };
 
