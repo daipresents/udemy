@@ -11,8 +11,20 @@ passport.serializeUser((email, done) => {
 passport.deserializeUser((email, done) => {
   MongoClient.connect(CONNECTION_URL, OPTIONS, (error, client) => {
     var db = client.db(DATABASE);
-    db.collection("users").findOne({ email })
+    db.collection("users")
+      .findOne({ email })
       .then((user) => {
+        return new Promise((resolve, reject) => {
+          db.collection("privileges")
+            .findOne({ role: user.role })
+            .then((privilege) => {
+              user.permissions = privilege.permissions;
+              resolve(user);
+            }).catch((error) => {
+              reject(error);
+            });
+        });
+      }).then((user) => {
         done(null, user);
       }).catch((error) => {
         done(error);
@@ -43,16 +55,16 @@ passport.use("local-strategy",
             }
           });
         } else {
-          done(null, false, req.flash("message", "ユーザ名 または パスワード が間違っています。"));
+          done(null, false, req.flash("message", "ユーザー名 または パスワード が間違っています。"));
         }
       }).catch((error) => {
         done(error);
       }).then(() => {
         client.close();
-      })
+      });
     });
   })
-)
+);
 
 initialize = function () {
   return [
@@ -64,10 +76,21 @@ initialize = function () {
 authenticate = function () {
   return passport.authenticate(
     "local-strategy", {
-    successRedirect: "/account/",
-    failureRedirect: "/account/login"
-  }
+      successRedirect: "/account/",
+      failureRedirect: "/account/login"
+    }
   );
+};
+
+authorize = function (privilege) {
+  return function (req, res, next) {
+    if (req.isAuthenticated() &&
+      (req.user.permissions || []).indexOf(privilege) >= 0) {
+      next();
+    } else {
+      res.redirect("/account/login");
+    }
+  };
 };
 
 module.exports = {
