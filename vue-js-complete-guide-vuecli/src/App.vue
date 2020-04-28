@@ -1,7 +1,9 @@
 <template>
   <div>
-    <LikeHeader></LikeHeader>
-    <h2>{{ number }}</h2>
+    <LikeHeader>
+      <h1>トータルのいいね数</h1>
+      <h2>{{ number }}</h2>
+    </LikeHeader>
     <LikeNumber :total-number="number" @my-click="incrementNumber"></LikeNumber>
     <LikeNumber :total-number="number"></LikeNumber>
   </div>
@@ -13,17 +15,17 @@ import LikeHeader from "./components/LikeHeader";
 export default {
   data() {
     return {
-      number: 12
+      number: 12,
     };
   },
   components: {
     LikeHeader,
   },
   methods: {
-    incrementNumber (value) {
+    incrementNumber(value) {
       this.number = value;
-    }
-  }
+    },
+  },
 };
 </script>
 
